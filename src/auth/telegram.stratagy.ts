@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
 export class TelegramStrategy extends PassportStrategy(Strategy, 'telegram') {
   constructor(private authService: AuthService) {
     super({
-      botToken: process.env.TELEGRAM_BOT_TOKEN,
+      botToken: process.env.TELEGRAM_BOT_TOKEN!,
     });
   }
 
