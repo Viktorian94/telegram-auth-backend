@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({isGlobal: true}),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -20,5 +20,7 @@ import { ConfigModule } from '@nestjs/config';
     UsersModule,
     AuthModule,
   ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
