@@ -2,11 +2,19 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/user.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TelegrafModule } from 'nestjs-telegraf';
 
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
+    TelegrafModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        token: configService.get<string>('TELEGRAM_BOT_TOKEN') as string,
+      }),
+      inject: [ConfigService],
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -15,8 +23,10 @@ import { ConfigModule } from '@nestjs/config';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       autoLoadEntities: true,
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+    TelegrafModule,
     UsersModule,
     AuthModule,
   ],

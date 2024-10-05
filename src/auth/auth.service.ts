@@ -8,15 +8,15 @@ export class AuthService {
   constructor(private usersService: UsersService) {}
 
   async validateOrCreateUser(profileData: any): Promise<User> {
-    let user = await this.usersService.findByTelegramId(profileData.id);
+    let user = await this.usersService.findByTelegramId(profileData.id || profileData.telegram_id);
 
     if (!user) {
       user = await this.usersService.create({
-        telegramId: profileData.id,
+        telegramId: profileData.id || profileData.telegram_id,
         firstName: profileData.first_name,
         lastName: profileData.last_name,
         username: profileData.username,
-        phoneNumber: profileData.phone_number,
+        phoneNumber: profileData.phone_number || null,
         languageCode: profileData.language_code,
         photoUrl: profileData.photo_url,
       });

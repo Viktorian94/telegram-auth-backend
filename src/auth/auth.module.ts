@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
 import { UsersModule } from 'src/users/user.module';
-import { PassportModule } from '@nestjs/passport';
-import TelegramStrategy from 'passport-telegram-official';
+import { ConfigModule } from '@nestjs/config';
+import { AuthController } from './auth.controller';
 
 @Module({
-  imports: [PassportModule, UsersModule], 
+  imports: [UsersModule, ConfigModule],
+  providers: [AuthService],
   controllers: [AuthController],
-  providers: [TelegramStrategy, AuthService],
 })
 export class AuthModule {}

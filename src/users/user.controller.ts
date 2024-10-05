@@ -1,6 +1,6 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
+
 import { User } from './user.entity';
-import { ILike } from 'typeorm';
 import { UsersService } from './user.service';
 
 @Controller('users')
@@ -8,22 +8,17 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get()
-  async findAll(@Query() query: any): Promise<User[]> {
-    const { page = 1, limit = 10, search } = query;
-    const skip = (page - 1) * limit;
+  async getAllUsers(): Promise<User[]> {
+    return this.usersService.findAll();
+  }
 
-    const where = search
-      ? [
-          { username: ILike(`%${search}%`) },
-          { firstName: ILike(`%${search}%`) },
-          { lastName: ILike(`%${search}%`) },
-        ]
-      : {};
+  @Get('search')
+  async searchUsers(@Query('q') query: string): Promise<User[]> {
+    return this.usersService.searchUsers(query);
+  }
 
-    return this.usersService.findAll({
-      where,
-      skip,
-      take: limit,
-    });
+  @Get(':id')
+  async getUserById(@Param('id') id: number): Promise<User | null> {
+    return this.usersService.findById(id);
   }
 }
