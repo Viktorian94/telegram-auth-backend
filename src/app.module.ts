@@ -20,7 +20,7 @@ const port = process.env.DB_PORT as unknown as number;
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      port: port || 3000,
+      port: port || 4000,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
